@@ -95,6 +95,10 @@ export default function Login() {
               minLength={8}
               maxLength={30}
             />
+            <button>
+              Login
+              <div className="arrow"></div>
+            </button>
           </form>
         </div>
       </div>
