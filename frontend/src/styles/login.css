@@ -1,0 +1,116 @@
+.splitDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.splitDiv > div {
+  width: 50% !important;
+  height: 100vh;
+}
+
+.splitDiv .banner {
+  background: linear-gradient(135deg, #3065de, #1ed384);
+  height: 100vh;
+  width: 50vw;
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  padding-left: 5%;
+}
+
+main {
+  padding-left: 0;
+}
+
+.benefit {
+  display: flex;
+  margin-top: 1em;
+  gap: 0.5em;
+}
+
+.benefitIcon {
+  height: 3em;
+  width: 3em;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(66, 111, 194, 0.354);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.logo {
+  position: absolute;
+  left: 5em;
+  top: 5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  flex-direction: row;
+}
+
+/* credit to uiverse (uiverse.io/reglobby/hard-warthog-73) */
+.input {
+  border: 2px solid transparent;
+  font-size: large;
+  width: 15em;
+  height: 2.5em;
+  padding-left: 0.8em;
+  outline: none;
+  overflow: hidden;
+  background-color: #212121;
+  border-radius: 10px;
+  transition:
+    all 0.1s,
+    width 0s ease;
+}
+
+.input:hover {
+  background-color: #2e2e2e;
+}
+
+.input:focus {
+  border: 2px solid #257dd0;
+  box-shadow: 0px 0px 0px 2px rgb(74, 157, 236, 20%);
+  background-color: #414141;
+}
+.input:invalid {
+  border: 2px solid #d02525;
+  box-shadow: 0px 0px 0px 2px rgba(236, 74, 74, 0.2);
+}
+
+.formContainer {
+  display: grid;
+  place-content: center;
+  gap: 0.5em;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+@media (max-width: 1000px) {
+  .banner {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .input {
+    width: 100vw;
+  }
+}

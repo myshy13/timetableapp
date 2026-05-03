@@ -1,0 +1,97 @@
+.sidebarLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4em;
+  width: 100%;
+  padding: 0.5em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar {
+  --border-color: #ffffff59;
+  height: 100vh;
+  position: fixed;
+  width: 200px;
+  background-color: #ffffff56;
+  border-right: var(--border-color) solid 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background-color: #0f09095d;
+  }
+}
+
+.sidebarItems {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.sidebarPage {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5em;
+  width: calc(100% - 1em);
+  margin: 0.25em auto;
+  border-radius: 0.7em;
+  padding: 0.3em;
+  box-sizing: border-box;
+  height: 2.5em;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sidebarPage:first-child {
+  margin-top: 0.5em;
+}
+
+.sidebarPage:hover {
+  background-color: #252525;
+}
+
+.sidebarPage.active {
+  color: var(--primary);
+  background-color: #303030;
+}
+
+.sidebarAccount {
+  height: 4em;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  gap: 1em;
+  margin: 0;
+  padding: 1em;
+  overflow: hidden;
+
+  position: absolute;
+  bottom: 0;
+
+  border-top: var(--border-color) solid 1px;
+}
+
+.sidebarAccountLogo {
+  height: 2em;
+  border-radius: 1.5em;
+  aspect-ratio: 1 / 1;
+
+  background-color: var(--primary);
+
+  display: grid;
+  place-content: center;
+  overflow: hidden;
+  font-size: large;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    color-scheme: dark;
+  }
+}
