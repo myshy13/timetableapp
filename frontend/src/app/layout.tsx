@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <body>
+    <body>
         <SidebarProvider>
           <AccountProvider>
             <Sidebar />

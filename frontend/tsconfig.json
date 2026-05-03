@@ -24,7 +24,7 @@
     ],
     "paths": {
       "@/*": [
-        "frontend/src/*"
+        "/workspaces/timetableapp/frontend/src/*"
       ]
     }
   },
