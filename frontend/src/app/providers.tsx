@@ -103,6 +103,23 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const signup = async (uname: string, pword: string, fullname: string): Promise<boolean> => {
+    const res = await fetch(`${server}/api/v1/createUser`, {
+      method: "POST",
+      body: JSON.stringify({
+        "uname": uname,
+        "pword": pword,
+        "name": fullname
+      })
+    })
+    const data = await res.json()
+    if (!data.error) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   const logout = async () => {
     await fetch(`${server}/api/v1/logout`, {
       method: "POST",

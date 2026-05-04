@@ -95,10 +95,15 @@ export default function Login() {
               minLength={8}
               maxLength={30}
             />
-            <button>
+           <div className="inline" style={{display: "inline-flex", alignItems: "center", gap: "0.6em"}}>
+             <button>
               Login
               <div className="arrow"></div>
             </button>
+            Or <button className="secondary">
+              Sign up
+            </button>
+            </div>
           </form>
         </div>
       </div>
