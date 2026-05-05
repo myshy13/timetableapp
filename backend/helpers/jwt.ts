@@ -38,6 +38,7 @@ async function initializeKeys() {
 export interface jwtPayload {
   uname: string
   name: string
+  id: number
 }
 
 export interface verification {
@@ -60,6 +61,7 @@ export async function signJWT(userID: number, exp: string) {
   const jwt = await new jose.SignJWT({
     uname: user.uname,
     name: user.name,
+    id: user.id,
   })
     .setProtectedHeader({ alg: "RS256" })
     .setIssuedAt()
