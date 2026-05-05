@@ -42,10 +42,22 @@ router.delete("/api/v1/timetable/:id", verifyAccessToken, body("id").isNumeric()
     if(!req.user) {
       return res.status(500).json({ error: "Unauthorized"})
     }
+
+    const timetable = db.prepare("DELETE FROM timetables WHERE id = ? AND user_id = ?").run(timetableID, req.user?.id)
+    if (!timetable) {
+      return res.status(404).json({ error: "Timetable not found" })
+    }
+    return res.status(200).json({ message: "Timetable deleted" })
+
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: "Internal server error" })
   }
+})
+
+router.patch("/api/v1/timetable/:id", verifyAccessToken, body("id").isNumeric().notEmpty(), body("newValues").isObject().notEmpty(), (req, res) => {
+  const {timetableID, newValues} = req.body;
+  
 })
 
 router.get("/api/v1/timetable/:id", body("id").isString().notEmpty(), verifyAccessToken, (req, res) => {
