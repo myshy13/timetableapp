@@ -13,9 +13,10 @@ type AccountContextType = {
   user: User | null
   accessToken: string | null
   loading: boolean
-  login: (uname: string, pword: string) => Promise<void>
+  login: (uname: string, pword: string) => Promise<boolean>
   logout: () => Promise<void>
   refresh: () => Promise<void>
+  signup: (name: string, uname: string, pword: string) => Promise<boolean>
 }
 
 const sidebarContext = createContext<string | null>(null)
@@ -36,7 +37,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const server = "http://192.168.10.111:3001"
+  const server = "https://orange-orbit-5gq55pg5qrgrfvrpr-3001.app.github.dev"
 
   const refresh = async () => {
     try {
@@ -77,7 +78,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const login = async (uname: string, pword: string) => {
+  const login = async (uname: string, pword: string): Promise<boolean> => {
+    alert("login")
     const res = await fetch(`${server}/api/v1/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,13 +87,16 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ uname, pword }),
     })
 
-    if (!res.ok) throw new Error("Login failed")
+
+    if (!res.ok) {
+      throw new Error("Login failed")
+      return false
+    }
 
     const data = await res.json()
 
     setAccessToken(data.accessToken)
 
-    // optional: fetch user info immediately
     const me = await fetch(`${server}/api/v1/me`, {
       headers: {
         Authorization: `Bearer ${data.accessToken}`,
@@ -100,16 +105,19 @@ export function AccountProvider({ children }: { children: ReactNode }) {
 
     if (me.ok) {
       setUser(await me.json())
+      return true
+    } else {
+      return false
     }
   }
 
-  const signup = async (uname: string, pword: string, fullname: string): Promise<boolean> => {
+  const signup = async (name: string, uname: string, pword: string): Promise<boolean> => {
     const res = await fetch(`${server}/api/v1/createUser`, {
       method: "POST",
       body: JSON.stringify({
         "uname": uname,
         "pword": pword,
-        "name": fullname
+        "name": name
       })
     })
     const data = await res.json()
@@ -145,6 +153,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
         login,
         logout,
         refresh,
+        signup,
       }}>
       {children}
     </AccountContext.Provider>

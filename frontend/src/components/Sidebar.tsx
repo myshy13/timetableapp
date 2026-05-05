@@ -18,12 +18,12 @@ export function Sidebar() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!account.accessToken && pathname != "/login") {
+    if (!account.accessToken && (pathname != "/login" && pathname != "/signup")) {
       router.push("/login")
     }
   })
 
-  if (pathname != "/login") {
+  if (pathname != "/login" && pathname != "/signup") {
     return (
       <div className="sidebar">
         <div className="sidebarLogo">

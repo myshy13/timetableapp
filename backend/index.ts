@@ -22,6 +22,7 @@ app.use(
     origin: (origin, callback) => {
       const allowed = [
         "http://localhost:3000", // dev server (next)
+        "https://orange-orbit-5gq55pg5qrgrfvrpr-3001.app.github.dev", // github dev // temporary
       ]
       callback(null, allowed.includes(origin as string))
     },

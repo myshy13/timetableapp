@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-    <body>
+      <body data-new-gr-c-s-check-loaded="14.1286.0" data-gr-ext-installed={""}>
         <SidebarProvider>
           <AccountProvider>
             <Sidebar />

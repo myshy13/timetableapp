@@ -5,6 +5,7 @@ import "../../styles/login.css"
 import { Nunito } from "next/font/google"
 import { Calendar, ClipboardCheck, GraduationCap, LayoutDashboard } from "lucide-react"
 import { useEffect, useRef } from "react"
+import type { MouseEvent } from 'react';
 
 const regular = Nunito({
   weight: "400",
@@ -14,26 +15,29 @@ const bold = Nunito({
   weight: "600",
 })
 
-export default function Login() {
+export default function Signup() {
   const account = useAccount()
-  const router = useRouter()
 
   const unameRef = useRef(null)
   const pwordRef = useRef(null)
+  const nameRef = useRef(null)
 
-  async function handleLogin(e: SubmitEvent) {
+  const handleLogin = async (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     try {
-      if (unameRef.current && pwordRef.current) {
-        var uname: HTMLInputElement = unameRef.current as HTMLInputElement
-        var pword: HTMLInputElement = pwordRef.current as HTMLInputElement
-        alert(`uname: ${uname.value}. pword: ${pword.value}`)
-        if (await account.login(uname.value, pword.value)) {
-          alert("Success")
-        } else {
-          alert("Failed to login")
+      (async () => {
+        if (unameRef.current && pwordRef.current && nameRef.current) {
+          var uname: HTMLInputElement = unameRef.current as HTMLInputElement
+          var pword: HTMLInputElement = pwordRef.current as HTMLInputElement
+          var name: HTMLInputElement = nameRef.current as HTMLInputElement
+          alert(`uname: ${uname.value}. pword: ${pword.value}. name: ${name.value}`)
+          if (await account.signup(uname.value, pword.value, name.value)) {
+            alert("Success")
+          } else {
+            alert("Failed to login")
+          }
         }
-      }
+      })()
     } catch { }
   }
 
@@ -91,6 +95,14 @@ export default function Login() {
             className="form">
             <input
               type="text"
+              name="name"
+              id="name"
+              className="name input"
+              placeholder="full name"
+              ref={nameRef}
+            />
+            <input
+              type="text"
               name="uname"
               id="uname"
               className="uname input"
@@ -108,13 +120,10 @@ export default function Login() {
               maxLength={30}
             />
             <div className="inline" style={{ display: "inline-flex", alignItems: "center", gap: "0.6em" }}>
-              <button onClick={handleLogin}>
+              <button onClick={async (e) => { handleLogin(e) }}>
                 Login
                 <div className="arrow"></div>
               </button>
-              Or <a className="secondary" href="/signup">
-                Sign up
-              </a>
             </div>
           </form>
         </div>
