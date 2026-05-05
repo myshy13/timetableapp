@@ -36,7 +36,13 @@ router.post("/api/v1/timetable", verifyAccessToken, body("name").notEmpty().isSt
 })
 
 router.delete("/api/v1/timetable/:id", verifyAccessToken, body("id").isNumeric(), (req, res) => {
-  try {} catch (err) {
+  try {
+    const timetableID = req.body.id
+
+    if(!req.user) {
+      return res.status(500).json({ error: "Unauthorized"})
+    }
+  } catch (err) {
     console.error(err)
     return res.status(500).json({ error: "Internal server error" })
   }
