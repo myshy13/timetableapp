@@ -6,6 +6,7 @@ import db from "./helpers/database/db"
 import createRouter from "./routes/create.ts"
 import authRouter from "./routes/auth.ts"
 import cookieParser from "cookie-parser"
+import profileRouter from "./routes/profile.ts"
 import cors from "cors"
 config()
 
@@ -21,8 +22,7 @@ app.use(
   cors({
     origin: (origin, callback) => {
       const allowed = [
-        "http://localhost:3000", // dev server (next)
-        "https://orange-orbit-5gq55pg5qrgrfvrpr-3001.app.github.dev", // github dev // temporary
+        "http://localhost:3000", // next.js on localhost
       ]
       callback(null, allowed.includes(origin as string))
     },
@@ -33,6 +33,7 @@ app.use(
 // link routers
 app.use(createRouter)
 app.use(authRouter)
+app.use(profileRouter)
 
 app.listen(port, async () => {
   console.log(`http://localhost:${port}`)

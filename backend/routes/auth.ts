@@ -98,6 +98,7 @@ if (process.env.NODE_ENV != "PRODUCTION") {
 
 router.post(
   "/api/v1/createUser",
+  limiter,
   body("uname").isLength({ min: 3, max: 30 }).trim().toLowerCase(),
   body("pword").isString().isLength({ min: 8 }),
   body("name").isLength({ min: 1, max: 100 }).trim(),

@@ -14,7 +14,7 @@ declare global {
 
 export async function verifyAccessToken(req: Request, res: Response, next: NextFunction) {
   try {
-    const authHeader = req.headers.authorization
+    const authHeader = req.headers["authorization"]
     const token = authHeader?.split(" ")[1]
 
     if (!token) {
