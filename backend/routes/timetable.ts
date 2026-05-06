@@ -56,8 +56,24 @@ router.delete("/api/v1/timetable/:id", verifyAccessToken, body("id").isNumeric()
 })
 
 router.patch("/api/v1/timetable/:id", verifyAccessToken, body("id").isNumeric().notEmpty(), body("newValues").isObject().notEmpty(), (req, res) => {
-  const {timetableID, newValues} = req.body;
+  const { timetableID, newValues } = req.body;
   
+  if (!req.user || !timetableID || !newValues) {
+    return res.status(400).json({ error: "Missing required fields" })
+  }
+
+  var timetable = db.prepare("SELECT * FROM timetables WHERE id = ? AND user_id = ?").get(timetableID, req.user?.id)
+  if (!timetable) {
+    return res.status(404).json({ error: "Timetable not found" })
+  }
+  newValues.updated_at = new Date().toISOString()
+
+  const updateFields = Object.keys(newValues).map(key => `${key} = ?`).join(", ")
+  const updateValues = Object.values(newValues)
+
+  db.prepare(`UPDATE timetables SET ${updateFields} WHERE id = ? AND user_id = ?`).run(...updateValues, timetableID, req.user?.id)
+
+  return res.status(200).json({ message: "Timetable updated" })
 })
 
 router.get("/api/v1/timetable/:id", body("id").isString().notEmpty(), verifyAccessToken, (req, res) => {
@@ -101,5 +117,20 @@ router.get("/api/v1/timetables", verifyAccessToken, body("filter").optional().is
 
   return res.status(200).json({ timetables })
 })
+
+
+// ============= EVENT ROUTES ============
+/* TODO ROUTES:
+* POST /api/v1/event (create an event)
+* GET /api/v1/events (list all events of a specific timetable)
+* GET /api/v1/events/:id
+* DELETE /api/v1/events/:id
+* PUT /api/v1/events/:id
+* 
+* CRUD
+*/
+
+router.post("/api/v1/event", verifyAccessToken, body("timetable_id").isNumeric().notEmpty(), body("title").notEmpty().isString(), (req, res) => {})
+
 
 export default router;
