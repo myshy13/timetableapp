@@ -22,7 +22,6 @@ router.get(
 
       let payload
       payload = await verifyJWT(token)
-      console.log(payload)
 
       if (!payload) {
         return res.status(404).json({ error: "User not found" })

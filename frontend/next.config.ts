@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   devIndicators: false,
   allowedDevOrigins: ["192.168.10.111", "*.github.dev"],
+  turbopack: {
+    root: "/",
+  },
 }
 
 export default nextConfig

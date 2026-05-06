@@ -1,10 +1,10 @@
 "use client"
-import { useRouter } from "next/navigation"
 import { useAccount } from "../providers"
 import "../../styles/login.css"
 import { Nunito } from "next/font/google"
 import { Calendar, ClipboardCheck, GraduationCap, LayoutDashboard } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { FormEvent, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 
 const regular = Nunito({
   weight: "400",
@@ -21,20 +21,21 @@ export default function Login() {
   const unameRef = useRef(null)
   const pwordRef = useRef(null)
 
-  async function handleLogin(e: SubmitEvent) {
+  useEffect(() => {
+    if (account.accessToken) {
+      router.push("/")
+    }
+  }, [account, router])
+
+  async function handleLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     try {
       if (unameRef.current && pwordRef.current) {
-        var uname: HTMLInputElement = unameRef.current as HTMLInputElement
-        var pword: HTMLInputElement = pwordRef.current as HTMLInputElement
-        alert(`uname: ${uname.value}. pword: ${pword.value}`)
-        if (await account.login(uname.value, pword.value)) {
-          alert("Success")
-        } else {
-          alert("Failed to login")
-        }
+        const uname: HTMLInputElement = unameRef.current as HTMLInputElement
+        const pword: HTMLInputElement = pwordRef.current as HTMLInputElement
+        await account.login(uname.value, pword.value)
       }
-    } catch { }
+    } catch {}
   }
 
   return (
@@ -88,7 +89,8 @@ export default function Login() {
           <h2>Welcome back</h2>
           <p style={{ color: "lightgray" }}>Sign in to continue</p>
           <form
-            className="form">
+            className="form"
+            onSubmit={handleLogin}>
             <input
               type="text"
               name="uname"
@@ -107,12 +109,17 @@ export default function Login() {
               minLength={8}
               maxLength={30}
             />
-            <div className="inline" style={{ display: "inline-flex", alignItems: "center", gap: "0.6em" }}>
-              <button onClick={handleLogin}>
+            <div
+              className="inline"
+              style={{ display: "inline-flex", alignItems: "center", gap: "0.6em" }}>
+              <button type="submit">
                 Login
                 <div className="arrow"></div>
               </button>
-              Or <a className="secondary" href="/signup">
+              Or{" "}
+              <a
+                className="secondary"
+                href="/signup">
                 Sign up
               </a>
             </div>

@@ -18,10 +18,12 @@ export function Sidebar() {
   const router = useRouter()
 
   useEffect(() => {
-    if (!account.accessToken && (pathname != "/login" && pathname != "/signup")) {
+    // Do not redirect while loading to avoid flash redirects
+    if (account.loading) return
+    if (!account.accessToken && pathname != "/login" && pathname != "/signup") {
       router.push("/login")
     }
-  })
+  }, [account.accessToken, pathname, account.loading])
 
   if (pathname != "/login" && pathname != "/signup") {
     return (
@@ -62,7 +64,14 @@ export function Sidebar() {
             Timetable
           </Link>
         </div>
-        <div className="sidebarAccount">
+        <div
+          className="sidebarAccount"
+          onClick={() => {
+            router.push("/account")
+          }}
+          onMouseOver={() => {
+            router.prefetch("/account")
+          }}>
           <div className={`sidebarAccountLogo ${googleFlex.className}`}>
             {account.user?.name[0]}
           </div>

@@ -113,7 +113,7 @@ router.post(
 
       // check if it isn't there already
       if (db.prepare("SELECT * FROM users WHERE uname = ?").get(uname) != null) {
-        return res.status(409).json({ error: "User already exists/ Duplicate username" })
+        return res.status(409).json({ error: "User already exists, try a different username" })
       }
 
       db.prepare("INSERT INTO users (uname, name, pwordhash) VALUES (?, ?, ?)").run(

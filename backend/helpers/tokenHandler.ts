@@ -69,7 +69,6 @@ export async function verifyRefreshToken(refreshToken: string) {
 
     throw new Error("Invalid refresh token")
   } catch (err) {
-    console.error(err)
     return null
   }
 }

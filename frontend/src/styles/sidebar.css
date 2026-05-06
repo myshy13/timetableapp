@@ -95,3 +95,13 @@
     color-scheme: dark;
   }
 }
+
+@media (max-width: 500px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 3vh;
+  }
+}

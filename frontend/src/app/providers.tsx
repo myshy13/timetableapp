@@ -9,6 +9,10 @@ type User = {
   name: string
 }
 
+interface SignupResult {
+  error?: string
+  message?: string
+}
 type AccountContextType = {
   user: User | null
   accessToken: string | null
@@ -16,7 +20,7 @@ type AccountContextType = {
   login: (uname: string, pword: string) => Promise<boolean>
   logout: () => Promise<void>
   refresh: () => Promise<void>
-  signup: (name: string, uname: string, pword: string) => Promise<boolean>
+  signup: (uname: string, pword: string, name: string) => Promise<SignupResult>
 }
 
 const sidebarContext = createContext<string | null>(null)
@@ -37,7 +41,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const server = "https://orange-orbit-5gq55pg5qrgrfvrpr-3001.app.github.dev"
+  const server = "http://localhost:3001"
 
   const refresh = async () => {
     try {
@@ -46,24 +50,30 @@ export function AccountProvider({ children }: { children: ReactNode }) {
         credentials: "include",
       })
 
-      if ((await res.json()).error) {
+      // Parse JSON response once
+      const result = await res.json()
+
+      // If the backend returned an error field, treat as failure
+      if (result?.error) {
         setAccessToken(null)
         setUser(null)
-        console.log(await res.json())
+        console.log(result)
         return
       }
+
       if (!res.ok) {
         setAccessToken(null)
         setUser(null)
         return
       }
 
-      const data = await res.json()
-      setAccessToken(data.accessToken)
+      // Successful refresh – store new access token
+      setAccessToken(result.accessToken)
 
+      // Fetch user profile using the new token
       const me = await fetch(`${server}/api/v1/me`, {
         headers: {
-          Authorization: `Bearer ${data.accessToken}`,
+          Authorization: `Bearer ${result.accessToken}`,
         },
       })
 
@@ -79,7 +89,6 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   }
 
   const login = async (uname: string, pword: string): Promise<boolean> => {
-    alert("login")
     const res = await fetch(`${server}/api/v1/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -87,45 +96,40 @@ export function AccountProvider({ children }: { children: ReactNode }) {
       body: JSON.stringify({ uname, pword }),
     })
 
-
     if (!res.ok) {
-      throw new Error("Login failed")
       return false
-    }
-
-    const data = await res.json()
-
-    setAccessToken(data.accessToken)
-
-    const me = await fetch(`${server}/api/v1/me`, {
-      headers: {
-        Authorization: `Bearer ${data.accessToken}`,
-      },
-    })
-
-    if (me.ok) {
-      setUser(await me.json())
-      return true
     } else {
-      return false
+      try {
+        const data = await res.json()
+
+        setAccessToken(data.accessToken)
+
+        const me = await fetch(`${server}/api/v1/me`, {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        })
+
+        if (me.ok) {
+          setUser(await me.json())
+        }
+      } catch {}
+      return true
     }
   }
 
-  const signup = async (name: string, uname: string, pword: string): Promise<boolean> => {
+  const signup = async (uname: string, pword: string, name: string): Promise<SignupResult> => {
     const res = await fetch(`${server}/api/v1/createUser`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        "uname": uname,
-        "pword": pword,
-        "name": name
-      })
+        uname: uname,
+        pword: pword,
+        name: name,
+      }),
     })
     const data = await res.json()
-    if (!data.error) {
-      return true
-    } else {
-      return false
-    }
+    return data
   }
 
   const logout = async () => {
