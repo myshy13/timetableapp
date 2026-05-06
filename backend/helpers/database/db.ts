@@ -36,8 +36,8 @@ db.exec(`
     user_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     description TEXT,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   );
 
@@ -52,7 +52,17 @@ db.exec(`
     color TEXT NOT NULL,
     teacher TEXT,
     FOREIGN KEY (timetable_id) REFERENCES timetables(id) ON DELETE CASCADE
-  )
+  );
+
+  CREATE TABLE IF NOT EXISTS assignments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT,
+    due_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    color TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
 `) // color: hex colour code (full length, not transparent. Example #5fff3b)
 
 export default db

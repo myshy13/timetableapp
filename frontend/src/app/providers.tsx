@@ -17,10 +17,12 @@ type AccountContextType = {
   user: User | null
   accessToken: string | null
   loading: boolean
+  server: string
   login: (uname: string, pword: string) => Promise<boolean>
   logout: () => Promise<void>
   refresh: () => Promise<void>
   signup: (uname: string, pword: string, name: string) => Promise<SignupResult>
+  getAssignments: () => Promise<object[]>
 }
 
 const sidebarContext = createContext<string | null>(null)
@@ -88,6 +90,21 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const getAssignments = async () => {
+    const res = await fetch(`${server}/api/v1/assignments`, {
+      headers: {
+        authorization: `Bearer ${accessToken}`,
+      },
+      method: "GET",
+    })
+    if (!res.ok) {
+      return
+    }
+    const data = await res.json()
+    console.log(data)
+    return data
+  }
+
   const login = async (uname: string, pword: string): Promise<boolean> => {
     const res = await fetch(`${server}/api/v1/login`, {
       method: "POST",
@@ -146,6 +163,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -158,6 +176,8 @@ export function AccountProvider({ children }: { children: ReactNode }) {
         logout,
         refresh,
         signup,
+        getAssignments,
+        server,
       }}>
       {children}
     </AccountContext.Provider>

@@ -8,6 +8,8 @@ import authRouter from "./routes/auth.ts"
 import cookieParser from "cookie-parser"
 import profileRouter from "./routes/profile.ts"
 import cors from "cors"
+import timetablesRouter from "./routes/assignments.ts"
+import { verifyAccessToken } from "./helpers/tokenHandler.ts"
 config()
 
 const app = e()
@@ -34,6 +36,11 @@ app.use(
 app.use(createRouter)
 app.use(authRouter)
 app.use(profileRouter)
+app.use(timetablesRouter)
+
+app.put("/api/v1/checkAuth", verifyAccessToken, (req, res) => {
+  res.status(200).send(req.user)
+})
 
 app.listen(port, async () => {
   console.log(`http://localhost:${port}`)
